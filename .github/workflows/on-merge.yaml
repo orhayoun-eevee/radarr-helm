@@ -1,0 +1,13 @@
+name: Publish Chart
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-chart:
+    uses: orhayoun-eevee/build-workflow/.github/workflows/publish-chart.yml@main
+    with:
+      chart_path: .
+    secrets: inherit  # Required for cross-repo workflows
