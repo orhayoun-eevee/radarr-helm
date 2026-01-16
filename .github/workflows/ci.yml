@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate-gold:
-    uses: owner/build-workflow/.github/workflows/validate-gold.yml@main
+    uses: orhayoun-eevee/build-workflow/.github/workflows/validate-gold.yml@main
     with:
       working_directory: gold
       script_name: generate_gold.sh
