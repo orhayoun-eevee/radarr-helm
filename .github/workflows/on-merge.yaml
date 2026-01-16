@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish-chart:
     uses: orhayoun-eevee/build-workflow/.github/workflows/publish-chart.yml@main
