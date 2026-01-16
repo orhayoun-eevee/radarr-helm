@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened]
+
+jobs:
+  validate-gold:
+    uses: owner/build-workflow/.github/workflows/validate-gold.yml@main
+    with:
+      working_directory: gold
+      script_name: generate_gold.sh
+      chart_path: .
+    secrets: inherit  # Required for cross-repo workflows
