@@ -1,0 +1,642 @@
+# Default values for radarr-new
+# Converted to libchart pattern (nested under app-chart dependency)
+# ----------------------------------------------------------------------------
+# Global Configuration
+# ----------------------------------------------------------------------------
+global:
+  name: radarr
+  chart:
+    appVersion: 6.0.4.10291
+  labels:
+    overrides:
+      app.kubernetes.io/instance: radarr
+
+# ----------------------------------------------------------------------------
+# App-Chart Configuration (Nested under dependency name)
+# ----------------------------------------------------------------------------
+app-chart:
+  # ----------------------------------------------------------------------------
+  # Service Configuration
+  # ----------------------------------------------------------------------------
+  network:
+    enabled: true
+    services:
+      enabled: true
+      items:
+        http:
+          enabled: true
+          type: ClusterIP
+          ports:
+            http:
+              port: 8080
+              targetPort: http
+              protocol: TCP
+          annotations:
+            description: "Radarr media center HTTP service"
+        metrics:
+          enabled: true
+          type: ClusterIP
+          ports:
+            metrics:
+              port: 9100
+              targetPort: metrics
+              protocol: TCP
+          annotations:
+            description: "Radarr media center HTTP service"
+
+    # ----------------------------------------------------------------------------
+    # Feature: Networking (Gateway API & Security)
+    # ----------------------------------------------------------------------------
+    httpRoute:
+      enabled: true
+      port: 8080
+      host: radarr-k8s.orhayoun.com
+      gateway:
+        name: shared-platform-gateway
+        namespace: istio-system
+      routes:
+        # Main Application Route (HTTPS)
+        - name: route
+          enabled: true
+          listener:
+            sectionName: https
+          rules:
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /
+              backendRefs:
+                - name: radarr-http
+                  port: 8080
+                  weight: 100
+                  group: ""
+                  kind: Service
+
+        # HTTP Redirect Route
+        - name: http-redirect
+          enabled: true
+          listener:
+            sectionName: http
+          rules:
+            - matches:
+                - path:
+                    type: PathPrefix
+                    value: /
+              filters:
+                - type: RequestRedirect
+                  requestRedirect:
+                    scheme: https
+                    statusCode: 301
+    networkPolicy:
+      enabled: true
+      items: 
+        default:
+          enabled: true
+          policyTypes:
+            - Ingress
+            - Egress
+          ingress:
+            - from:
+                # Gateway traffic (HTTP + HBONE for ambient mesh)
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: istio-system
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: shared-platform-gateway
+                      
+                # Prometheus metrics scraping (metrics port + HBONE for ambient mesh)
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: monitoring
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: prometheus
+
+                # Home Assistant API access (HTTP + HBONE for ambient mesh)
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: homeassistant
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: home-assistant
+              ports:
+                - protocol: TCP
+                  port: 15008
+          egress:
+            # DNS access (required for service discovery and external lookups)
+            - to:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: kube-system
+                  podSelector:
+                    matchLabels:
+                      k8s-app: kube-dns
+              ports:
+                - protocol: UDP
+                  port: 53
+                - protocol: TCP
+                  port: 53
+
+            - to:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: istio-system
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: download-clients
+              ports:
+                - protocol: TCP
+                  port: 15008
+
+            - to:
+                - ipBlock:
+                    cidr: "0.0.0.0/0"
+                    except:
+                      - "10.42.0.0/16"
+                      - "10.43.0.0/16"
+                      - "192.168.0.0/16"
+              ports:
+                - protocol: TCP
+                  port: 443
+
+    istio:
+      enabled: true
+      authorizationPolicy:
+        enabled: true
+        items:
+          # Ingress gateway access - allows traffic from the gateway to the service
+          ingress:
+            enabled: true
+            action: ALLOW
+            rules:
+              - from:
+                  - source:
+                      principals:
+                        - "cluster.local/ns/istio-system/sa/shared-platform-gateway-istio"
+                to:
+                  - operation:
+                      ports: ["8080"]
+          # Prometheus metrics scraping - allows Prometheus to scrape metrics
+          prometheus:
+            enabled: true
+            action: ALLOW
+            rules:
+              - from:
+                  - source:
+                      principals:
+                        - "cluster.local/ns/monitoring/sa/prometheus-kube-prometheus-prometheus"
+                to:
+                  - operation:
+                      ports: ["9100"]
+          # Home Assistant access (custom policy)
+          homeassistant:
+            enabled: true
+            action: ALLOW
+            rules:
+              - from:
+                  - source:
+                      principals:
+                        - "cluster.local/ns/homeassistant/sa/homeassistant-home-assistant"
+                to:
+                  - operation:
+                      ports: ["8080"]
+      # ----------------------------------------------------------------------------
+      # Circuit Breaker Configuration
+      # ----------------------------------------------------------------------------
+      destinationrule:
+        enabled: true
+        host: radarr-http
+        trafficPolicy:
+          connectionPool:
+            tcp:
+              maxConnections: 100
+            http:
+              http1MaxPendingRequests: 10
+              http2MaxRequests: 100
+              maxRequestsPerConnection: 2
+          outlierDetection:
+            consecutive5xxErrors: 5
+            interval: 30s
+            baseEjectionTime: 30s
+            maxEjectionPercent: 50
+ 
+
+  # ----------------------------------------------------------------------------
+  # Deployment Configuration
+  # ----------------------------------------------------------------------------
+  deployment:
+    replicas: 1
+    strategy:
+      type: Recreate
+    revisionHistoryLimit: 3
+    terminationGracePeriodSeconds: 60
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: false
+    automountServiceAccountToken: false
+
+    # Pod labels
+    podLabels:
+      app.kubernetes.io/component: media-manager
+      app.kubernetes.io/part-of: media-center
+      logging.kubernetes.io/component: media-center
+      logging.kubernetes.io/service: radarr
+
+    # Pod security context
+    podSecurityContext:
+      fsGroup: 1011
+      fsGroupChangePolicy: OnRootMismatch
+      runAsNonRoot: true
+      supplementalGroups:
+        - 1010  # downloads group for NFS access
+        - 1003  # media-nfs group for NFS access
+
+    # Main container configuration
+    # NOTE: Container name 'radarr' matches dashboard queries (container="radarr")
+    # Application-v2 requires explicit container definitions (no defaults)
+    containers:
+      radarr:
+        enabled: true
+        image:
+          repository: ghcr.io/runlix/radarr
+          tag: "release-6.0.4.10291-latest"
+          digest: "sha256:9a66eb0d9422af321be8435183613bc23f8f047c1a9e2b4f51e75ea2ebfab32e"
+          pullPolicy: IfNotPresent
+
+        env:
+          - name: TZ
+            value: "UTC"
+          - name: RADARR__SERVER__PORT
+            value: "8080"
+          - name: RADARR__SERVER__BINDADDRESS
+            value: "0.0.0.0"
+        
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: media
+            mountPath: /media
+          - name: media-old
+            mountPath: /media-old
+          - name: downloads
+            mountPath: /downloads
+          - name: backup
+            mountPath: /backup
+          - name: tmp
+            mountPath: /tmp
+
+        # Health Probes
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 30
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+
+        # Container Security Context (main container override)
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1013  # Matches Radarr PUID
+          runAsGroup: 1011  # Matches Radarr PGID
+          allowPrivilegeEscalation: false
+          privileged: false
+          appArmorProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+
+        # Resources
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+            ephemeral-storage: 2Gi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+            ephemeral-storage: 2Gi
+
+      # Metrics exporter container (Exportarr)
+      exportarr:
+        enabled: true
+        image:
+          repository: ghcr.io/orhayoun/exportarr
+          tag: "v2.3.1"
+          digest: "sha256:2650f6a501b1d691daf5dfe758068f44336d0bb1d443f9db2c94900244d423bc"
+          pullPolicy: IfNotPresent
+
+        args:
+          - "radarr"
+
+        env:
+          - name: URL
+            value: http://localhost:8080
+          - name: CONFIG
+            value: /config/config.xml
+          - name: PORT
+            value: "9100"
+          - name: ENABLE_ADDITIONAL_METRICS
+            value: "false"
+          - name: ENABLE_UNKNOWN_QUEUE_ITEMS
+            value: "false"
+
+        ports:
+          - containerPort: 9100
+            name: metrics
+            protocol: TCP
+
+        volumeMounts:
+          - name: config
+            mountPath: /config
+
+        # Health Probes
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+
+        startupProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+            scheme: HTTP
+          initialDelaySeconds: 45
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 30
+          successThreshold: 1
+
+        # Container Security Context
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534  # nobody user
+          runAsGroup: 65534
+          appArmorProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
+
+        # Resources
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+            ephemeral-storage: 10Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+            ephemeral-storage: 10Mi
+
+  # ----------------------------------------------------------------------------
+  # Feature: Persistence
+  # ----------------------------------------------------------------------------
+  persistence:
+    enabled: true
+    claims:
+      config:
+        size: 1Gi
+        storageClass: longhorn
+        accessMode: ReadWriteOnce
+        retain: true
+    volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: radarr-config
+      - name: media
+        nfs:
+          server: snorlax.orhayoun.com
+          path: /mnt/vol1/media-center/media/movies
+      - name: media-old
+        nfs:
+          server: snorlax.orhayoun.com
+          path: /mnt/vol1/Media/videos/Movies
+      - name: downloads
+        nfs:
+          server: snorlax.orhayoun.com
+          path: /mnt/vol1/media-center/downloads
+      - name: backup
+        nfs:
+          server: snorlax.orhayoun.com
+          path: /mnt/vol1/media-center/backup/radarr
+      - name: tmp
+        emptyDir:
+          sizeLimit: 1Gi
+
+  # ----------------------------------------------------------------------------
+  # Feature: Observability
+  # ----------------------------------------------------------------------------
+  metrics:
+    enabled: true
+    # ServiceMonitor Configuration
+    serviceMonitor:
+      enabled: true
+      port: 9100
+      interval: 10s  # ServiceMonitor scrape interval
+      scrapeTimeout: 5s  # ServiceMonitor scrape timeout
+      path: /metrics # Optional - Metrics endpoint path (e.g., "/metrics")
+      honorLabels: true # Optional - Honor labels from target (boolean)
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: radarr
+          app.kubernetes.io/instance: radarr
+          app.kubernetes.io/component: service-metrics
+
+      namespaceSelector:
+        matchNames:
+          - media-center
+
+      relabelings:
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_namespace
+          targetLabel: namespace
+        - action: replace
+          sourceLabels:
+            - __meta_kubernetes_pod_name
+          targetLabel: instance
+
+      metricRelabelings:
+        - action: replace
+          replacement: radarr
+          targetLabel: service
+        - action: replace
+          replacement: media-center
+          targetLabel: component
+    # PrometheusRule Configuration
+    prometheusRule:
+      enabled: true
+      rules:
+        - alert: RadarrDown
+          expr: radarr_system_status{service="radarr", component="media-center"} == 0
+          for: 5m
+          labels:
+            severity: critical
+            service: radarr
+            component: media-center
+          annotations:
+            summary: "Radarr service is down"
+            description: "Radarr system status is 0 (unhealthy) for more than 5 minutes."
+        - alert: RadarrQueueHigh
+          expr: radarr_movie_wanted_total{service="radarr", component="media-center"} > 100
+          for: 30m
+          labels:
+            severity: warning
+            service: radarr
+            component: media-center
+          annotations:
+            summary: "Radarr wanted backlog is high"
+            description: "Radarr has more than 100 wanted movies for more than 30 minutes (download backlog)."
+        - alert: RadarrMissingMoviesHigh
+          expr: radarr_movie_missing_total{service="radarr", component="media-center"} > 50
+          for: 1h
+          labels:
+            severity: info
+            service: radarr
+            component: media-center
+          annotations:
+            summary: "Radarr has many missing movies"
+            description: "Radarr has more than 50 missing movies. This may indicate indexing or download issues."
+        - alert: RadarrExportarrMetricsUnavailable
+          expr: kube_deployment_status_replicas_available{deployment="radarr", namespace="media-center"} > 0 and absent_over_time(radarr_system_status{service="radarr", component="media-center"}[5m])
+          for: 5m
+          labels:
+            severity: warning
+            service: radarr
+            component: media-center
+            sidecar: exportarr
+          annotations:
+            summary: "Radarr Exportarr metrics endpoint unavailable"
+            description: "Radarr pod is running but Exportarr metrics are missing for more than 5 minutes. Check Exportarr container logs in pod {{ $labels.pod }}."
+        - alert: RadarrHealthIssuesPresent
+          expr: radarr_system_health_issues{service="radarr", component="media-center"} > 0
+          for: 15m
+          labels:
+            severity: warning
+            service: radarr
+            component: media-center
+          annotations:
+            summary: "Radarr reports health issues"
+            description: "Radarr is reporting one or more health issues for more than 15 minutes (count={{ $value }})."
+        - alert: RadarrExporterScrapeSlow
+          expr: max_over_time(radarr_scrape_duration_seconds{service="radarr", component="media-center"}[10m]) > 2
+          for: 10m
+          labels:
+            severity: warning
+            service: radarr
+            component: media-center
+            sidecar: exportarr
+          annotations:
+            summary: "Radarr exporter scrape is slow"
+            description: "Radarr Exportarr scrape duration exceeded 2s for more than 10 minutes (max={{ $value }}s)."
+        # ============================================================================
+        # Exporter Sidecar Alerts (Auto-generated when exporter enabled)
+        # ============================================================================
+        - alert: RadarrExporterNotReady
+          expr: |
+            kube_deployment_status_replicas_available{deployment="radarr", namespace="media-center"} > 0
+            and
+            kube_pod_container_status_ready{container="exportarr", pod=~"radarr-.*", namespace="media-center"} == 0
+          for: 2m
+          labels:
+            severity: warning
+            component: media-center
+            service: radarr
+            sidecar: exportarr
+          annotations:
+            summary: "Radarr exporter sidecar is not ready"
+            description: "Exporter container in Radarr pod {{ $labels.pod }} is not ready for more than 2 minutes."
+        - alert: RadarrExporterRestarting
+          expr: increase(kube_pod_container_status_restarts_total{namespace="media-center", pod=~"radarr-.*", container="exportarr"}[1h]) > 2
+          for: 0m
+          labels:
+            severity: warning
+            component: media-center
+            service: radarr
+            sidecar: exportarr
+          annotations:
+            summary: "Radarr exporter sidecar restarting frequently"
+            description: "Exporter sidecar container in Radarr pod {{ $labels.pod }} has restarted more than 2 times in the last hour."
+    # Grafana Configuration
+    grafana:
+      enabled: true
+      dashboard:
+        enabled: true
+        items:
+          app:
+            enabled: true
+            json: {}
+  # ----------------------------------------------------------------------------
+  # Service Account
+  # ----------------------------------------------------------------------------
+  serviceAccount:
+    create: true
+    name: "radarr"
+    automount: false
+    annotations:
+      description: "Radarr media center service account"
+      app.kubernetes.io/managed-by: "argocd"
+
+  # ----------------------------------------------------------------------------
+  # Pod Disruption Budget
+  # ----------------------------------------------------------------------------
+  podDisruptionBudget: # No need as we have one replica
+    enabled: false
+    minAvailable: 1
+    unhealthyPodEvictionPolicy: AlwaysAllow
