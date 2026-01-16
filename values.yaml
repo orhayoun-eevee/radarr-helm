@@ -5,7 +5,7 @@
 # ----------------------------------------------------------------------------
 global:
   name: radarr
-  chart:
+  chart: 
     appVersion: 6.0.4.10291
   labels:
     overrides:
