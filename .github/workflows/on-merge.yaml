@@ -14,4 +14,6 @@ jobs:
     uses: orhayoun-eevee/build-workflow/.github/workflows/on-merge-flow.yaml@main
     with:
       chart_path: .
+      install_istio: true
+      install_prometheus: true
     secrets: inherit  # Required for cross-repo workflows

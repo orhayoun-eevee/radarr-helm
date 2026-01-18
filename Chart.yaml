@@ -14,7 +14,7 @@ dependencies:
 # dependencies:
 #   - name: app-chart
 #     version: "1.0.0"
-#     repository: "file://../../../../helm-common-lib/appChart"
+#     repository: "file://../../helm-common-lib/appChart"
 maintainers:
   - name: Radarr Team
 home: https://radarr.video/
