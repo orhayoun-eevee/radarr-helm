@@ -17,5 +17,6 @@ jobs:
       install_istio: true
       install_longhorn: true
       install_prometheus: true
+      values_file: values-ci.yaml
     secrets: inherit  # Required for cross-repo workflows
  
