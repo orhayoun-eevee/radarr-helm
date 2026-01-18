@@ -4,11 +4,12 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: radarr-default
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "network-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -82,11 +83,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: radarr
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "serviceaccount"
   annotations:
     app.kubernetes.io/managed-by: argocd
@@ -98,6 +100,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: radarr-app
+  namespace: media-center
   labels:
     app.kubernetes.io/component: grafana-dashboard
     app.kubernetes.io/instance: radarr
@@ -2566,11 +2569,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: radarr-config
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "pvc"
   annotations:
     helm.sh/resource-policy: keep
@@ -2587,11 +2591,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: radarr-http
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: service-http
   annotations:
     description: Radarr media center HTTP service
@@ -2611,11 +2616,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: radarr-metrics
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: service-metrics
   annotations:
     description: Radarr media center HTTP service
@@ -2635,11 +2641,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: radarr
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "deployment"
 spec:
   replicas: 1
@@ -2656,7 +2663,7 @@ spec:
         app.kubernetes.io/instance: radarr
         app.kubernetes.io/name: radarr
         app.kubernetes.io/version: 6.0.4.10291
-        helm.sh/chart: app-chart-1.0.0
+        helm.sh/chart: app-chart-0.0.1
         app.kubernetes.io/component: media-manager
         app.kubernetes.io/part-of: media-center
         logging.kubernetes.io/component: media-center
@@ -2867,11 +2874,12 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: radarr-homeassistant
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2896,11 +2904,12 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: radarr-ingress
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2925,11 +2934,12 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   name: radarr-prometheus
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2954,11 +2964,12 @@ apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: radarr
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "destination-rule"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2983,11 +2994,12 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: radarr-route
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "http-route"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -3018,11 +3030,12 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: radarr-http-redirect
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "http-route"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -3052,11 +3065,12 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: radarr
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "prometheus-rule"
 
 spec:
@@ -3167,11 +3181,12 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: radarr
+  namespace: media-center
   labels:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-1.0.0
+    helm.sh/chart: app-chart-0.0.1
     app.kubernetes.io/component: "servicemonitor"
   annotations:
     argocd.argoproj.io/sync-wave: "2"
