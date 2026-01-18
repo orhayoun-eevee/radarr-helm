@@ -15,6 +15,7 @@ jobs:
     with:
       chart_path: .
       install_istio: true
+      install_longhorn: true
       install_prometheus: true
     secrets: inherit  # Required for cross-repo workflows
  
