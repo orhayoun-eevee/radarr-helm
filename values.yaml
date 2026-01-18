@@ -261,7 +261,7 @@ app-chart:
           repository: ghcr.io/runlix/radarr
           tag: "release-6.0.4.10291-latest"
           digest: "sha256:9a66eb0d9422af321be8435183613bc23f8f047c1a9e2b4f51e75ea2ebfab32e"
-          pullPolicy: IfNotPresent
+          pullPolicy: Always
 
         env:
           - name: TZ
@@ -358,7 +358,7 @@ app-chart:
           repository: ghcr.io/orhayoun/exportarr
           tag: "v2.3.1"
           digest: "sha256:2650f6a501b1d691daf5dfe758068f44336d0bb1d443f9db2c94900244d423bc"
-          pullPolicy: IfNotPresent
+          pullPolicy: Always
 
         args:
           - "radarr"
