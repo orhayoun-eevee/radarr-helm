@@ -17,3 +17,4 @@ jobs:
       install_istio: true
       install_prometheus: true
     secrets: inherit  # Required for cross-repo workflows
+ 
