@@ -11,7 +11,7 @@ on:
 
 jobs:
   validate-gold:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/on-pr-flow.yml@main
+    uses: orhayoun-eevee/build-workflow/.github/workflows/on-pr-flow.yaml@main
     with:
       working_directory: gold
       script_name: generate_gold.sh
