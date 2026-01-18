@@ -5,7 +5,7 @@ MODE="${1:-test}"  # Default to test mode
 TEMP_FILE=$(mktemp)
 
 # Generate helm template (chart root is parent directory)
-helm template radarr .. -f ../values.yaml --namespace media-center > "$TEMP_FILE"
+helm template radarr .. -f ../values.yaml > "$TEMP_FILE"
 
 if [ "$MODE" = "update" ]; then
     mv "$TEMP_FILE" gold_file.yaml
