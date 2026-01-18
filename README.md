@@ -1,5 +1,5 @@
 # Radarr Helm Chart
-
+ 
 This Helm chart deploys Radarr, a movie collection manager, using the `app-chart` dependency pattern. The chart orchestrates application deployment, networking, and monitoring resources.
 
 ## Installation
