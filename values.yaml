@@ -139,6 +139,18 @@ app-chart:
                 - protocol: TCP
                   port: 53
 
+            # PostgreSQL database access
+            - ports:
+                - port: 5432
+                  protocol: TCP
+              to:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: postgresql
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: databases
+
             - to:
                 - namespaceSelector:
                     matchLabels:
@@ -444,7 +456,7 @@ app-chart:
             cpu: 100m
             memory: 64Mi
             ephemeral-storage: 10Mi
-
+  
   # ----------------------------------------------------------------------------
   # Feature: Persistence
   # ----------------------------------------------------------------------------

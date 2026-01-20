@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "network-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -58,6 +58,16 @@ spec:
           matchLabels:
             k8s-app: kube-dns
     - ports:
+      - port: 5432
+        protocol: TCP
+      to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: postgresql
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: databases
+    - ports:
       - port: 15008
         protocol: TCP
       to:
@@ -88,7 +98,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "serviceaccount"
   annotations:
     app.kubernetes.io/managed-by: argocd
@@ -2574,7 +2584,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "pvc"
   annotations:
     helm.sh/resource-policy: keep
@@ -2596,7 +2606,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: service-http
   annotations:
     description: Radarr media center HTTP service
@@ -2621,7 +2631,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: service-metrics
   annotations:
     description: Radarr media center HTTP service
@@ -2646,7 +2656,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "deployment"
 spec:
   replicas: 1
@@ -2663,7 +2673,7 @@ spec:
         app.kubernetes.io/instance: radarr
         app.kubernetes.io/name: radarr
         app.kubernetes.io/version: 6.0.4.10291
-        helm.sh/chart: app-chart-0.0.1
+        helm.sh/chart: app-chart-0.0.2
         app.kubernetes.io/component: media-manager
         app.kubernetes.io/part-of: media-center
         logging.kubernetes.io/component: media-center
@@ -2879,7 +2889,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2909,7 +2919,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2939,7 +2949,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "authorization-policy"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2969,7 +2979,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "destination-rule"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -2999,7 +3009,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "http-route"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -3035,7 +3045,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "http-route"
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -3070,7 +3080,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "prometheus-rule"
 
 spec:
@@ -3186,7 +3196,7 @@ metadata:
     app.kubernetes.io/instance: radarr
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: app-chart-0.0.1
+    helm.sh/chart: app-chart-0.0.2
     app.kubernetes.io/component: "servicemonitor"
   annotations:
     argocd.argoproj.io/sync-wave: "2"

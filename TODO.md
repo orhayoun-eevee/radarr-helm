@@ -52,31 +52,6 @@ This document tracks items from the security review that require investigation a
 
 ---
 
-### 3. Prometheus Scraping Signals (Mixed Annotations vs ServiceMonitor)
-
-**Status:** ⚠️ Needs Investigation
-
-**Issue:**
-- Security review mentions mixed signals: `prometheus.io/scrape: "false"` annotations but also ServiceMonitor defined
-- The annotation won't affect Prometheus Operator scraping when using ServiceMonitors
-- Can confuse humans and any non-Operator Prometheus setups
-
-**Investigation Needed:**
-- [ ] Search for `prometheus.io/scrape` annotations in the chart templates
-- [ ] Search for `prometheus.io/scrape` annotations in generated manifests
-- [ ] If annotations exist, determine if they should be removed
-- [ ] Document the convention: "ServiceMonitor is source of truth; annotations are ignored"
-- [ ] Update README.md to clarify Prometheus scraping approach
-
-**References:**
-- [Prometheus Operator model](https://prometheus-operator.dev/docs/api-reference/api/)
-- ServiceMonitors are selected via label/namespace selectors
-
-**Current Documentation:**
-- README.md mentions "ServiceMonitor is the source of truth" but doesn't explicitly address conflicting annotations
-
----
-
 ## Notes
 
 - All items are from the security review in `SECURITY_REVIEW.md`

@@ -9,7 +9,7 @@ keywords:
   - media-center
 dependencies:
   - name: app-chart
-    version: "0.0.1"
+    version: "0.0.2"
     repository: "oci://ghcr.io/orhayoun-eevee/app-chart"
 # dependencies:
 #   - name: app-chart
