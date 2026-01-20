@@ -3,4 +3,4 @@ dependencies:
   repository: oci://ghcr.io/orhayoun-eevee/app-chart
   version: 0.0.2
 digest: sha256:6a2482a534ff55eb814ec9e21359b5c176ce959cdd7d9d1a05793f8454916f8a
-generated: "2026-01-20T17:30:31.577371+02:00"
+generated: "2026-01-20T19:45:18.396778+02:00"
