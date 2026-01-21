@@ -9,11 +9,11 @@ keywords:
   - media-center
 dependencies:
   - name: lib-chart
-    version: "0.0.3"
+    version: "0.0.4"
     repository: "oci://ghcr.io/orhayoun-eevee/lib-chart"
 # dependencies:
   # - name: lib-chart
-  #   version: "0.0.3"
+  #   version: "0.0.4"
   #   repository: "file://../../helm-common-lib/libChart"
 maintainers:
   - name: Radarr Team
