@@ -1,6 +1,6 @@
 dependencies:
-- name: app-chart
-  repository: oci://ghcr.io/orhayoun-eevee/app-chart
-  version: 0.0.2
-digest: sha256:6a2482a534ff55eb814ec9e21359b5c176ce959cdd7d9d1a05793f8454916f8a
-generated: "2026-01-20T19:45:18.396778+02:00"
+- name: lib-chart
+  repository: oci://ghcr.io/orhayoun-eevee/lib-chart
+  version: 0.0.3
+digest: sha256:e234b77cea16299bf125a8f59d79da3c1f8839bb9c8d91d000b15f27a388e0ee
+generated: "2026-01-21T17:24:41.571118+02:00"
