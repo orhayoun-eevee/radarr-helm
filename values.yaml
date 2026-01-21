@@ -626,10 +626,6 @@ metrics:
   # Grafana Configuration
   grafana:
     enabled: true
-    instanceSelector:
-      matchLabels:
-        app.kubernetes.io/name: grafana
-        app.kubernetes.io/instance: prometheus
     dashboard:
       enabled: true
       items:
