@@ -249,11 +249,11 @@ spec:
           resources:
             limits:
               cpu: 100m
-              ephemeral-storage: 10Mi
+              ephemeral-storage: 100Mi
               memory: 64Mi
             requests:
               cpu: 10m
-              ephemeral-storage: 10Mi
+              ephemeral-storage: 100Mi
               memory: 32Mi
           livenessProbe:
             failureThreshold: 3
@@ -760,7 +760,6 @@ spec:
       interval: 10s
       scrapeTimeout: 5s
       path: /metrics
-      honorLabels: true
       relabelings:
         - action: replace
           sourceLabels:

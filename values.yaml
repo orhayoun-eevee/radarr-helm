@@ -1,4 +1,4 @@
-# Default values for radarr-new
+# Default values for radarr
 # Converted to libchart pattern (nested under app-chart dependency)
 # ----------------------------------------------------------------------------
 # Global Configuration
@@ -448,11 +448,11 @@ deployment:
         requests:
           cpu: 10m
           memory: 32Mi
-          ephemeral-storage: 10Mi
+          ephemeral-storage: 100Mi
         limits:
           cpu: 100m
           memory: 64Mi
-          ephemeral-storage: 10Mi
+          ephemeral-storage: 100Mi
 
 # ----------------------------------------------------------------------------
 # Feature: Persistence
@@ -501,7 +501,7 @@ metrics:
     interval: 10s  # ServiceMonitor scrape interval
     scrapeTimeout: 5s  # ServiceMonitor scrape timeout
     path: /metrics # Optional - Metrics endpoint path (e.g., "/metrics")
-    honorLabels: true # Optional - Honor labels from target (boolean)
+    honorLabels: false # Optional - Honor labels from target (boolean)
     selector:
       matchLabels:
         app.kubernetes.io/name: radarr
