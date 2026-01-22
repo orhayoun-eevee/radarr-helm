@@ -631,7 +631,7 @@ metrics:
       items:
         radarr-dashboard:
           enabled: true
-          name: "radarr-dashboard"
+          name: "application"
           allowCrossNamespaceImport: true
           file: "app.json"
           # Optional: Override instanceSelector for this specific dashboard
