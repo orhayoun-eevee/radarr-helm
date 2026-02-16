@@ -1,0 +1,50 @@
+suite: radarr chart contract
+templates:
+  - templates/all.yaml
+tests:
+  - it: renders expected default resource set and ingress host
+    asserts:
+      - hasDocuments:
+          count: 15
+      - documentIndex: 4
+        equal:
+          path: spec.hostnames[0]
+          value: radarr-k8s.orhayoun.com
+      - documentIndex: 13
+        equal:
+          path: spec.instanceSelector.matchLabels.dashboards
+          value: grafana
+      - documentIndex: 11
+        equal:
+          path: kind
+          value: ServiceMonitor
+
+  - it: wires radarr application container security and pvc correctly
+    asserts:
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].name
+          value: radarr
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].securityContext.readOnlyRootFilesystem
+          value: true
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].securityContext.runAsUser
+          value: 1013
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].securityContext.runAsGroup
+          value: 1011
+      - documentIndex: 14
+        equal:
+          path: metadata.name
+          value: radarr-config
+
+  - it: keeps minimal scenario render compact and deterministic
+    values:
+      - scenarios/minimal.yaml
+    asserts:
+      - hasDocuments:
+          count: 5
