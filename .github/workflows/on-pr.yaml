@@ -18,7 +18,7 @@ permissions:
 jobs:
   validate:
     name: Validate Radarr Chart
-    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@f3aa38eebaa71718193812fba1836c580676fec8
+    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@2db9ebcf2f7c313901c38eb42e8aa4cd5e242a6c
     with:
       chart_path: .
       kubernetes_version: "1.30.0"
