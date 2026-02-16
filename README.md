@@ -1,33 +1,62 @@
 # Radarr Helm Chart
 
-This Helm chart deploys Radarr, a movie collection manager, using the `app-chart` dependency pattern. The chart orchestrates application deployment, networking, and monitoring resources.
+This Helm chart deploys Radarr, a movie collection manager, using the shared `lib-chart` dependency pattern. The chart orchestrates application deployment, networking, and monitoring resources.
 
 ## Installation
 
 ```bash
-helm install radarr ./charts/services/radarr --namespace media-center
+helm install radarr . --namespace media-center
 ```
 
 ## Configuration
 
 See `values.yaml` for all available configuration options. The chart is organized into main sections:
 
-- `app-chart`: Core application deployment configuration (Deployment, Services, PVC, etc.)
+- `deployment`: Core application deployment configuration (Deployment, Services, PVC, etc.)
 - `network`: Network access and security policies (HTTPRoute, NetworkPolicy)
 - `metrics`: Monitoring, alerting, and dashboards (ServiceMonitor, PrometheusRule)
 
 ## Dependencies
 
 This chart depends on:
-- `app-chart` (v1.0.0) - Common application chart library
+- `lib-chart` (`0.0.7`) - Shared Helm library chart
 
 Before installing, ensure the dependency is available.
 
-Update dependencies:
+Update dependencies from the chart root:
 ```bash
-cd charts/services/radarr
 helm dependency update
 ```
+
+## Validation and Testing
+
+This chart uses the same reusable 5-layer validation model used by `helm-common-lib`:
+
+1. Syntax and structure (`yamllint`, `helm lint --strict`)
+2. Kubernetes schema validation (`kubeconform`) on rendered scenarios
+3. Metadata and version checks (`ct lint` + version bump policy)
+4. Regression testing (scenario snapshot comparison)
+5. Policy checks (`checkov`, `kube-linter`) using `tests/scenarios/full.yaml`
+
+### CI Workflows
+
+- PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
+- Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml`
+
+### Local Validation
+
+```bash
+make deps
+make snapshot-update
+make validate
+make ci
+```
+
+### Test Assets
+
+- `tests/scenarios/full.yaml`: full policy and snapshot scenario
+- `tests/scenarios/minimal.yaml`: minimal render scenario
+- `tests/snapshots/*.yaml`: committed expected manifests for Layer 4 snapshot checks
 
 ## Architecture and Operational Considerations
 
@@ -152,7 +181,7 @@ Radarr supports environment variables to override configuration entries. The cha
 
 ### Adding Additional Environment Variables
 
-To add additional Radarr-supported environment variables, edit `values.yaml` under `app-chart.deployment.containers.radarr.env`.
+To add additional Radarr-supported environment variables, edit `values.yaml` under `deployment.containers.radarr.env`.
 
 **Reference Documentation**: https://wiki.servarr.com/radarr/environment-variables
 
@@ -163,13 +192,12 @@ RADARR__CONFIGNAMESPACE__CONFIGITEM
 
 Example: To set the log level, add:
 ```yaml
-app-chart:
-  deployment:
-    containers:
-      radarr:
-        env:
-          - name: RADARR__LOG__LEVEL
-            value: "Info"
+deployment:
+  containers:
+    radarr:
+      env:
+        - name: RADARR__LOG__LEVEL
+          value: "Info"
 ```
 
 ## Networking
@@ -199,7 +227,7 @@ The chart uses the Kubernetes Gateway API for ingress routing, providing a stand
 - Portable across different Gateway implementations (Istio, NGINX, etc.)
 
 **Configuration Location:**
-- HTTPRoute configuration is in `values.yaml` under `app-chart.network.httpRoute`
+- HTTPRoute configuration is in `values.yaml` under `network.httpRoute`
 
 ### NetworkPolicy Egress Configuration
 
@@ -227,7 +255,7 @@ The NetworkPolicy allows broad egress access to the internet on ports 80, 443, a
 
 ## Security Features
 
-The chart includes comprehensive security features. For detailed security analysis, see [SECURITY_REVIEW.md](./SECURITY_REVIEW.md).
+The chart includes comprehensive security features documented in this README.
 
 ### Key Security Features
 
@@ -249,7 +277,7 @@ The deployment explicitly sets `enableServiceLinks: false` to disable automatic 
 - This is the Kubernetes-supported way to disable Service links
 
 **Configuration:**
-- Set in `values.yaml` under `app-chart.deployment.enableServiceLinks: false`
+- Set in `values.yaml` under `deployment.enableServiceLinks: false`
 - Applies to all pods in the deployment
 
 ## Monitoring
@@ -426,5 +454,5 @@ All NFS mounts use server: `snorlax.orhayoun.com`
 
 - **Radarr Documentation**: https://wiki.servarr.com/radarr
 - **Radarr Environment Variables**: https://wiki.servarr.com/radarr/environment-variables
-- **Security Review**: See [SECURITY_REVIEW.md](./SECURITY_REVIEW.md) for detailed security analysis
+- **Security Review**: See the **Security Features** section in this README
 - **Chart Dependencies**: See `Chart.yaml` for dependency versions
