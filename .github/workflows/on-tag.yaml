@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   publish-chart:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/release-chart.yaml@f3aa38eebaa71718193812fba1836c580676fec8
+    uses: orhayoun-eevee/build-workflow/.github/workflows/release-chart.yaml@2db9ebcf2f7c313901c38eb42e8aa4cd5e242a6c
     with:
       chart_path: .
     secrets: inherit  # Required for cross-repo workflows
