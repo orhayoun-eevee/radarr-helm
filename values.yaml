@@ -8,9 +8,6 @@ global:
   namespace: media-center
   chart:
     appVersion: 6.0.4.10291
-  labels:
-    overrides:
-      app.kubernetes.io/instance: radarr
 
 
 # ----------------------------------------------------------------------------
@@ -214,7 +211,7 @@ network:
     # ----------------------------------------------------------------------------
     # Circuit Breaker Configuration
     # ----------------------------------------------------------------------------
-    destinationrule:
+    destinationRule:
       enabled: true
       host: radarr-http
       trafficPolicy:
