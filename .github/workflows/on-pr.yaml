@@ -32,5 +32,5 @@ jobs:
       target_branch: main
       run_version_check: true
     secrets:
-      gh_app_id: ${{ secrets.GHCR_AUTO_APP_ID || vars.GHCR_AUTO_APP_ID }}
+      gh_app_id: ${{ secrets.GHCR_AUTO_APP_ID }}
       gh_app_private_key: ${{ secrets.GHCR_AUTO_PKEY }}
