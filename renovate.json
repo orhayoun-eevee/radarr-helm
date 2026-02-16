@@ -1,0 +1,44 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "labels": ["dependencies", "renovate"],
+  "rangeStrategy": "replace",
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "automerge": false,
+  "enabledManagers": ["github-actions", "helmv3", "custom.regex"],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "matchManagers": ["helmv3"],
+      "groupName": "helm dependencies"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "groupName": "container images",
+      "pinDigests": true
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/values\\.ya?ml$/"],
+      "matchStrings": [
+        "repository:\\s*(?<depName>[^\\s]+)\\s*\\n\\s*tag:\\s*\\\"?(?<currentValue>[^\\\"@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?\\\"?"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ]
+}
