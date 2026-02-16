@@ -34,7 +34,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["/values\\.ya?ml$/"],
+      "managerFilePatterns": ["/values\\.ya?ml$/"],
       "matchStrings": [
         "repository:\\s*(?<depName>[^\\s]+)\\s*\\n\\s*tag:\\s*\\\"?(?<currentValue>[^\\\"@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?\\\"?"
       ],
