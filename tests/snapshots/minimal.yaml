@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.6
+    helm.sh/chart: radarr-0.0.7
 spec:
   podSelector:
     matchLabels:
@@ -99,7 +99,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.6
+    helm.sh/chart: radarr-0.0.7
   annotations:
     app.kubernetes.io/managed-by: argocd
     description: Radarr media center service account
@@ -117,7 +117,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.6
+    helm.sh/chart: radarr-0.0.7
   annotations:
     helm.sh/resource-policy: keep
 spec:
@@ -140,7 +140,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.6
+    helm.sh/chart: radarr-0.0.7
   annotations:
     description: Radarr media center HTTP service
 spec:
@@ -166,7 +166,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.6
+    helm.sh/chart: radarr-0.0.7
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -184,7 +184,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: radarr
         app.kubernetes.io/version: 6.0.4.10291
-        helm.sh/chart: radarr-0.0.6
+        helm.sh/chart: radarr-0.0.7
         app.kubernetes.io/part-of: media-center
         logging.kubernetes.io/component: media-center
         logging.kubernetes.io/service: radarr

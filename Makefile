@@ -1,4 +1,4 @@
-.PHONY: help docker-build deps lint validate snapshot-update snapshot-diff security ci
+.PHONY: help docker-build deps lint validate snapshot-update snapshot-diff security bump ci
 
 # ============================================================================
 # Configuration
@@ -87,6 +87,13 @@ snapshot-diff: ## Show snapshot differences
 
 security: deps ## Run security checks (checkov + kube-linter)
 	@$(DOCKER_RUN) $(SCRIPTS)/validate-policy.sh
+
+bump: ## Bump chart version, refresh lock, and regenerate snapshots (requires VERSION=x.y.z)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "Error: VERSION is required. Usage: make bump VERSION=x.y.z"; \
+		exit 1; \
+	fi
+	@./scripts/bump-version.sh $(VERSION)
 
 ci: validate ## Run local CI equivalent (reusable 5-layer pipeline)
 	@echo ""
