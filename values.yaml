@@ -84,7 +84,7 @@ network:
                   statusCode: 301
   networkPolicy:
     enabled: true
-    items: 
+    items:
       default:
         enabled: true
         policyTypes:
@@ -99,7 +99,7 @@ network:
                 podSelector:
                   matchLabels:
                     app.kubernetes.io/name: shared-platform-gateway
-                    
+
               # Prometheus metrics scraping (metrics port + HBONE for ambient mesh)
               - namespaceSelector:
                   matchLabels:
@@ -244,7 +244,6 @@ deployment:
 
   # Pod labels
   podLabels:
-    app.kubernetes.io/component: media-manager
     app.kubernetes.io/part-of: media-center
     logging.kubernetes.io/component: media-center
     logging.kubernetes.io/service: radarr
@@ -276,12 +275,12 @@ deployment:
           value: "8080"
         - name: RADARR__SERVER__BINDADDRESS
           value: "0.0.0.0"
-      
+
       ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-      
+
       volumeMounts:
         - name: config
           mountPath: /config
@@ -621,6 +620,9 @@ metrics:
   # Grafana Configuration
   grafana:
     enabled: true
+    instanceSelector:
+      matchLabels:
+        dashboards: grafana
     dashboard:
       enabled: true
       items:

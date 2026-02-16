@@ -185,7 +185,6 @@ spec:
         app.kubernetes.io/name: radarr
         app.kubernetes.io/version: 6.0.4.10291
         helm.sh/chart: radarr-0.0.6
-        app.kubernetes.io/component: media-manager
         app.kubernetes.io/part-of: media-center
         logging.kubernetes.io/component: media-center
         logging.kubernetes.io/service: radarr

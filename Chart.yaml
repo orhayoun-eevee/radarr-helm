@@ -10,7 +10,7 @@ keywords:
 dependencies:
   - name: lib-chart
     version: "0.0.7"
-    repository: "oci://ghcr.io/orhayoun-eevee/lib-chart"
+    repository: "oci://ghcr.io/orhayoun-eevee"
 maintainers:
   - name: Radarr Team
 home: https://radarr.video/
