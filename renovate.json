@@ -8,7 +8,7 @@
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "automerge": false,
-  "enabledManagers": ["github-actions", "helmv3", "regex"],
+  "enabledManagers": ["github-actions", "helmv3", "custom.regex"],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
@@ -19,19 +19,19 @@
       "groupName": "helm dependencies"
     },
     {
-      "matchManagers": ["regex"],
+      "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "groupName": "container images",
       "pinDigests": true
     },
     {
-      "matchManagers": ["regex"],
+      "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
       "customType": "regex",
       "fileMatch": ["/values\\.ya?ml$/"],
