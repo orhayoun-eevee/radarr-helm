@@ -255,7 +255,7 @@ The NetworkPolicy allows broad egress access to the internet on ports 80, 443, a
 
 ## Security Features
 
-The chart includes comprehensive security features. For detailed security analysis, see [SECURITY_REVIEW.md](./SECURITY_REVIEW.md).
+The chart includes comprehensive security features documented in this README.
 
 ### Key Security Features
 
@@ -454,5 +454,5 @@ All NFS mounts use server: `snorlax.orhayoun.com`
 
 - **Radarr Documentation**: https://wiki.servarr.com/radarr
 - **Radarr Environment Variables**: https://wiki.servarr.com/radarr/environment-variables
-- **Security Review**: See [SECURITY_REVIEW.md](./SECURITY_REVIEW.md) for detailed security analysis
+- **Security Review**: See the **Security Features** section in this README
 - **Chart Dependencies**: See `Chart.yaml` for dependency versions

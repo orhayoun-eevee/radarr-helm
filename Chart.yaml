@@ -1,6 +1,6 @@
 apiVersion: v2
 name: radarr
-description: A Helm chart for Radarr using application-v2
+description: A Helm chart for Radarr using lib-chart
 type: application
 version: 0.0.6
 appVersion: "6.0.4.10291"
@@ -11,10 +11,6 @@ dependencies:
   - name: lib-chart
     version: "0.0.7"
     repository: "oci://ghcr.io/orhayoun-eevee/lib-chart"
-# dependencies:
-  # - name: lib-chart
-  #   version: "0.0.4"
-  #   repository: "file://../../helm-common-lib/libChart"
 maintainers:
   - name: Radarr Team
 home: https://radarr.video/
