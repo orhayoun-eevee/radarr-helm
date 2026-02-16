@@ -8,7 +8,7 @@
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "automerge": false,
-  "enabledManagers": ["github-actions", "helmv3", "custom.regex"],
+  "enabledManagers": ["github-actions", "helmv3", "regex"],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
@@ -19,22 +19,22 @@
       "groupName": "helm dependencies"
     },
     {
-      "matchManagers": ["custom.regex"],
+      "matchManagers": ["regex"],
       "matchDatasources": ["docker"],
       "groupName": "container images",
       "pinDigests": true
     },
     {
-      "matchManagers": ["custom.regex"],
+      "matchManagers": ["regex"],
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     }
   ],
-  "customManagers": [
+  "regexManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/values\\.ya?ml$/"],
+      "fileMatch": ["/values\\.ya?ml$/"],
       "matchStrings": [
         "repository:\\s*(?<depName>[^\\s]+)\\s*\\n\\s*tag:\\s*\\\"?(?<currentValue>[^\\\"@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?\\\"?"
       ],
