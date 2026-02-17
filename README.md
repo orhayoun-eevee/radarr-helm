@@ -73,3 +73,16 @@ This updates `Chart.yaml`, refreshes `Chart.lock`, and regenerates snapshots.
 - https://radarr.video/
 - `Chart.yaml`
 - `values.yaml`
+
+## Dependency Automation Policy
+
+This repo uses Renovate scoped automerge for low-risk updates only:
+
+- `github-actions`: `digest`, `pin`, `pinDigest`, `patch`, `minor`
+- `helmv3` dependencies: `digest`, `pin`, `pinDigest`, `patch`, `minor`
+- container image updates (`custom.regex` in `values.yaml`): `digest`, `pin`, `pinDigest`, `patch`, `minor`
+- `major` updates are not automerged
+
+Branch protection on `main` is expected to require passing validation checks before merge.
+
+For Renovate PRs that change `values.yaml`, `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
