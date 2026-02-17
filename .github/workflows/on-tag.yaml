@@ -15,4 +15,3 @@ jobs:
     with:
       chart_path: .
     secrets: inherit  # Required for cross-repo workflows
- 

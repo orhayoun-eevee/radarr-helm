@@ -39,15 +39,11 @@ jobs:
           ref: 0042a8575237d45861b99ce8dfb16d78f8007e33
           token: ${{ steps.app-token.outputs.token }}
 
-      - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+      - name: Build pinned validation image
+        run: make docker-build BUILD_WORKFLOW=.build-workflow DOCKER_IMAGE=helm-validate:renovate
 
       - name: Regenerate snapshots
-        run: make snapshot-update BUILD_WORKFLOW=.build-workflow DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate:latest
+        run: make snapshot-update BUILD_WORKFLOW=.build-workflow DOCKER_IMAGE=helm-validate:renovate
 
       - name: Commit updated snapshots
         run: |
