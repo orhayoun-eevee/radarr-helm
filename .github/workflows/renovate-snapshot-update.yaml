@@ -3,6 +3,8 @@ name: Renovate Snapshot Update
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - "values.yaml"
 
 permissions:
   contents: write
