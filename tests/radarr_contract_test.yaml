@@ -58,3 +58,35 @@ tests:
     asserts:
       - hasDocuments:
           count: 5
+
+  - it: disables destination rule when explicitly turned off
+    set:
+      network:
+        istio:
+          destinationRule:
+            enabled: false
+    asserts:
+      - hasDocuments:
+          count: 14
+
+  - it: applies grafana instance selector overrides from values
+    set:
+      metrics:
+        grafana:
+          instanceSelector:
+            matchLabels:
+              app.kubernetes.io/instance: observability
+              app.kubernetes.io/name: grafana-primary
+    asserts:
+      - documentSelector:
+          path: kind
+          value: GrafanaDashboard
+        equal:
+          path: spec.instanceSelector.matchLabels["app.kubernetes.io/instance"]
+          value: observability
+      - documentSelector:
+          path: kind
+          value: GrafanaDashboard
+        equal:
+          path: spec.instanceSelector.matchLabels["app.kubernetes.io/name"]
+          value: grafana-primary
