@@ -51,7 +51,7 @@ make snapshot-update
 make ci
 ```
 
-If you use the shared image directly (`DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate:latest`), authenticate Docker first:
+If you use the shared image directly (`DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate@sha256:<digest>`), authenticate Docker first:
 
 ```bash
 echo <TOKEN> | docker login ghcr.io -u <USER> --password-stdin
