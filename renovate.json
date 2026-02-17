@@ -8,25 +8,33 @@
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "automerge": false,
+  "platformAutomerge": true,
   "enabledManagers": ["github-actions", "helmv3", "custom.regex"],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
-      "groupName": "github actions"
+      "groupName": "github actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["digest", "pin", "pinDigest", "patch", "minor"]
     },
     {
       "matchManagers": ["helmv3"],
-      "groupName": "helm dependencies"
+      "groupName": "helm dependencies",
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["digest", "pin", "pinDigest", "patch", "minor"]
     },
     {
       "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "groupName": "container images",
-      "pinDigests": true
+      "pinDigests": true,
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["digest", "pin", "pinDigest", "patch", "minor"]
     },
     {
-      "matchManagers": ["custom.regex"],
-      "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     }
