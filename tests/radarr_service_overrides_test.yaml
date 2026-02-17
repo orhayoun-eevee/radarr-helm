@@ -1,0 +1,79 @@
+suite: radarr service and networking overrides
+templates:
+  - templates/all.yaml
+tests:
+  - it: applies http service type override
+    set:
+      network:
+        services:
+          items:
+            http:
+              type: NodePort
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-http
+        equal:
+          path: spec.type
+          value: NodePort
+
+  - it: applies http service port override
+    set:
+      network:
+        services:
+          items:
+            http:
+              ports:
+                http:
+                  port: 8181
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-http
+        equal:
+          path: spec.ports[0].port
+          value: 8181
+
+  - it: applies metrics service port override
+    set:
+      network:
+        services:
+          items:
+            metrics:
+              ports:
+                metrics:
+                  port: 9200
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-metrics
+        equal:
+          path: spec.ports[0].port
+          value: 9200
+
+  - it: applies http route host override in dedicated suite
+    set:
+      network:
+        httpRoute:
+          host: radarr.override.internal
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-route
+        equal:
+          path: spec.hostnames[0]
+          value: radarr.override.internal
+
+  - it: applies app timezone env override
+    set:
+      deployment:
+        containers:
+          radarr:
+            env:
+              - name: TZ
+                value: Europe/Berlin
+    asserts:
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].env[0].value
+          value: Europe/Berlin
