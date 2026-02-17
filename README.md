@@ -32,6 +32,15 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 
 - PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml`
+- Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
+
+Trigger behavior:
+- `on-pr.yaml`: automatic on every PR to `main`
+- `on-tag.yaml`: automatic on `v*` tag push
+- `renovate-snapshot-update.yaml`: automatic for Renovate PRs when `values.yaml` changes
+- `renovate-config.yaml`: automatic when Renovate config files change, plus manual `workflow_dispatch`
+
+For full cross-repo trigger ownership and lifecycle details, see `https://github.com/orhayoun-eevee/build-workflow/blob/main/docs/workflow-trigger-matrix.md`.
 
 ### Local Docker Validation
 
