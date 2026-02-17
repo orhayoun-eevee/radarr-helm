@@ -142,3 +142,17 @@ tests:
     asserts:
       - hasDocuments:
           count: 14
+
+  - it: applies explicit radarr image override for controlled rollouts
+    set:
+      deployment:
+        containers:
+          radarr:
+            image:
+              repository: registry.internal/radarr
+              tag: ci-test
+    asserts:
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].image
+          value: registry.internal/radarr:ci-test
