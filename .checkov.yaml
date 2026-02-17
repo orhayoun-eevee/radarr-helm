@@ -1,0 +1,2 @@
+skip-check:
+  - CKV_K8S_40 # Radarr container requires fixed PUID/PGID (1013/1011) for host volume compatibility.
