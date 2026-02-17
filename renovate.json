@@ -36,7 +36,7 @@
     },
     {
       "matchManagers": ["custom.regex"],
-      "matchDepTypes": ["workflow-version", "workflow-image"],
+      "matchDepTypes": ["workflow-version"],
       "groupName": "build-workflow releases",
       "automerge": true,
       "automergeType": "pr",
@@ -65,26 +65,6 @@
       "depNameTemplate": "orhayoun-eevee/build-workflow",
       "datasourceTemplate": "github-tags",
       "depTypeTemplate": "workflow-version"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/.github/workflows/.*\\.ya?ml$/"],
-      "matchStrings": [
-        "build_workflow_ref:\\s*\"?(?<currentValue>v\\d+\\.\\d+\\.\\d+)\"?"
-      ],
-      "depNameTemplate": "orhayoun-eevee/build-workflow",
-      "datasourceTemplate": "github-tags",
-      "depTypeTemplate": "workflow-version"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/.github/workflows/.*\\.ya?ml$/"],
-      "matchStrings": [
-        "docker_image:\\s*\"?ghcr\\.io/orhayoun-eevee/helm-validate:(?<currentValue>v\\d+\\.\\d+\\.\\d+)@(?<currentDigest>sha256:[a-f0-9]+)\"?"
-      ],
-      "depNameTemplate": "ghcr.io/orhayoun-eevee/helm-validate",
-      "datasourceTemplate": "docker",
-      "depTypeTemplate": "workflow-image"
     }
   ]
 }
