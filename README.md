@@ -47,6 +47,8 @@ make ci
 Snapshots in `tests/snapshots/*.yaml` are part of CI contract.
 If rendered output changes and snapshots are not updated (or are updated incorrectly), Layer 4 fails the PR.
 
+Schema-negative fixtures in `tests/schema-fail-cases/*.yaml` are also validated in Layer 4 and must fail schema validation for the expected reason.
+
 ### Test Assets
 
 - `tests/radarr_contract_test.yaml`

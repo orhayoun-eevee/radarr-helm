@@ -6,22 +6,29 @@ tests:
     asserts:
       - hasDocuments:
           count: 15
-      - documentIndex: 4
+      - documentSelector:
+          path: metadata.name
+          value: radarr-route
         equal:
           path: spec.hostnames[0]
           value: radarr-k8s.orhayoun.com
-      - documentIndex: 13
+      - documentSelector:
+          path: kind
+          value: GrafanaDashboard
         equal:
           path: spec.instanceSelector.matchLabels["app.kubernetes.io/instance"]
           value: prometheus
-      - documentIndex: 13
+      - documentSelector:
+          path: kind
+          value: GrafanaDashboard
         equal:
           path: spec.instanceSelector.matchLabels["app.kubernetes.io/name"]
           value: grafana
-      - documentIndex: 11
-        equal:
+      - documentSelector:
           path: kind
           value: ServiceMonitor
+        exists:
+          path: metadata.name
       - documentSelector:
           path: kind
           value: DestinationRule
@@ -90,3 +97,48 @@ tests:
         equal:
           path: spec.instanceSelector.matchLabels["app.kubernetes.io/name"]
           value: grafana-primary
+
+  - it: disables serviceMonitor when explicitly turned off
+    set:
+      metrics:
+        serviceMonitor:
+          enabled: false
+    asserts:
+      - hasDocuments:
+          count: 14
+
+  - it: applies httproute host override
+    set:
+      network:
+        httpRoute:
+          host: radarr.example.internal
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-route
+        equal:
+          path: spec.hostnames[0]
+          value: radarr.example.internal
+
+  - it: applies destination rule host override
+    set:
+      network:
+        istio:
+          destinationRule:
+            host: radarr-custom-http
+    asserts:
+      - documentSelector:
+          path: kind
+          value: DestinationRule
+        equal:
+          path: spec.host
+          value: radarr-custom-http
+
+  - it: disables grafana dashboard resources when grafana is disabled
+    set:
+      metrics:
+        grafana:
+          enabled: false
+    asserts:
+      - hasDocuments:
+          count: 14
