@@ -18,7 +18,7 @@ permissions:
 jobs:
   validate:
     name: Validate Radarr Chart
-    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@a3c215681f3fa7359255efca3815af8a9bf0ccda
+    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@v0.1.0
     with:
       chart_path: .
       kubernetes_version: "1.30.0"
@@ -31,7 +31,8 @@ jobs:
       run_policy: true
       target_branch: main
       run_version_check: true
-      build_workflow_ref: "a3c215681f3fa7359255efca3815af8a9bf0ccda"
+      build_workflow_ref: "v0.1.0"
+      docker_image: "ghcr.io/orhayoun-eevee/helm-validate:v0.1.0"
     secrets:
       gh_app_id: ${{ secrets.GHCR_AUTO_APP_ID }}
       gh_app_private_key: ${{ secrets.GHCR_AUTO_PKEY }}

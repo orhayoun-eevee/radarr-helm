@@ -156,3 +156,34 @@ tests:
         equal:
           path: spec.template.spec.containers[1].image
           value: registry.internal/radarr:ci-test
+
+  - it: keeps radarr networking and health probes wired to stable defaults
+    asserts:
+      - documentSelector:
+          path: metadata.name
+          value: radarr-http
+        equal:
+          path: spec.ports[0].port
+          value: 8080
+      - documentSelector:
+          path: metadata.name
+          value: radarr-metrics
+        equal:
+          path: spec.ports[0].targetPort
+          value: metrics
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].livenessProbe.httpGet.path
+          value: /ping
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].readinessProbe.httpGet.path
+          value: /ping
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
+          value: radarr-config
+      - documentIndex: 1
+        equal:
+          path: spec.template.spec.containers[1].imagePullPolicy
+          value: Always
