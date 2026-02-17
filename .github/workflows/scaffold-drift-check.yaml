@@ -31,6 +31,16 @@ jobs:
     steps:
       - name: Checkout chart repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: radarr-helm
+
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        with:
+          app-id: ${{ secrets.GHCR_AUTO_APP_ID }}
+          private-key: ${{ secrets.GHCR_AUTO_PKEY }}
+          owner: ${{ github.repository_owner }}
 
       - name: Checkout build-workflow
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -38,11 +48,13 @@ jobs:
           repository: orhayoun-eevee/build-workflow
           path: build-workflow
           ref: 0042a8575237d45861b99ce8dfb16d78f8007e33
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Verify scaffold sync
+        working-directory: radarr-helm
         run: |
           set -euo pipefail
-          cp build-workflow/scripts/sync-chart-scaffold.sh ./sync-chart-scaffold.sh
+          cp ../build-workflow/scripts/sync-chart-scaffold.sh ./sync-chart-scaffold.sh
           chmod +x ./sync-chart-scaffold.sh
           ./sync-chart-scaffold.sh --repos radarr-helm --ref 0042a8575237d45861b99ce8dfb16d78f8007e33 --root "$(pwd)/.."
 
