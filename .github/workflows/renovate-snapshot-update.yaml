@@ -40,8 +40,8 @@ jobs:
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ghcr.io
-          username: x-access-token
-          password: ${{ steps.app-token.outputs.token }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
 
       - name: Regenerate snapshots
         run: make snapshot-update BUILD_WORKFLOW=.build-workflow DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate:latest
