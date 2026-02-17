@@ -14,7 +14,6 @@ jobs:
   update-snapshots:
     uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-snapshot-update.yaml@v0.1.0
     with:
-      build_workflow_ref: v0.1.0
       snapshots_dir: tests/snapshots
     secrets:
       gh_app_id: ${{ secrets.GHCR_AUTO_APP_ID }}
