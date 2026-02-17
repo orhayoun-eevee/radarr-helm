@@ -24,4 +24,4 @@ permissions:
 
 jobs:
   validate:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-config.yaml@b950e7ca269da7fc0fa2f6ef92cdcc5890bb0e31
+    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-config.yaml@a3c215681f3fa7359255efca3815af8a9bf0ccda
