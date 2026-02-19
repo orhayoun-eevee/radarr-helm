@@ -31,18 +31,13 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 ### CI Workflows
 
 - Required gate: `.github/workflows/pr-required-checks.yaml` (thin wrapper around centralized `pr-required-checks-chart.yaml` in `build-workflow`; this is the only automatic PR gate)
-- Manual break-glass PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml` (includes keyless signing/attestation)
 - Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
-- Manual break-glass dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
-- Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`; automatic on push/schedule)
-- Manual break-glass scaffold drift check: `.github/workflows/scaffold-drift-check.yaml`
+- Renovate config validation: `.github/workflows/renovate-config.yaml` (automatic on matching config changes; supports `workflow_dispatch`)
+- Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`; automatic on push/schedule and manual via `workflow_dispatch`)
 
 Trigger behavior:
 - `pr-required-checks.yaml`: automatic on every PR to `main` and `merge_group` (`checks_requested`) (require this status in branch protection)
-- `on-pr.yaml`: manual via `workflow_dispatch`
-- `dependency-review.yaml`: manual via `workflow_dispatch`
-- `scaffold-drift-check.yaml`: manual via `workflow_dispatch`
 - `on-tag.yaml`: automatic on `v*` tag push
 - `renovate-snapshot-update.yaml`: automatic for Renovate PRs when `values.yaml` changes
 - `renovate-config.yaml`: automatic on push to `main` when Renovate config files change, plus manual `workflow_dispatch`
@@ -108,9 +103,9 @@ This repo uses Renovate scoped automerge for low-risk updates only:
 - container image updates (`custom.regex` in `values.yaml`): `digest`, `pin`, `pinDigest`, `patch`, `minor`
 - `major` updates are not automerged
 
-Branch protection on `main` is expected to require only the aggregate `required-checks` status before merge.
+Branch protection on `main` is expected to require only the aggregate `ci-required` status before merge.
 Recommended contexts:
-- `PR Required Checks / required-checks / required-checks (pull_request)`
-- `PR Required Checks / required-checks / required-checks (merge_group)`
+- `PR Required Checks / ci-required / ci-required (pull_request)`
+- `PR Required Checks / ci-required / ci-required (merge_group)`
 
 For Renovate PRs that change `values.yaml`, `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
