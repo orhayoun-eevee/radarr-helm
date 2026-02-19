@@ -12,4 +12,4 @@ concurrency:
 
 jobs:
   dependency-review:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.7
+    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.8

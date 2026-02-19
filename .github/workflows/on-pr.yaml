@@ -14,7 +14,7 @@ concurrency:
 jobs:
   validate:
     name: Validate Radarr Chart
-    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@v0.1.7
+    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@v0.1.8
     with:
       chart_path: .
       kubernetes_version: "1.30.0"

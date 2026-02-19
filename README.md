@@ -45,7 +45,7 @@ Trigger behavior:
 - `scaffold-drift-check.yaml`: manual via `workflow_dispatch`
 - `on-tag.yaml`: automatic on `v*` tag push
 - `renovate-snapshot-update.yaml`: automatic for Renovate PRs when `values.yaml` changes
-- `renovate-config.yaml`: automatic when Renovate config files change, plus manual `workflow_dispatch`
+- `renovate-config.yaml`: automatic on push to `main` when Renovate config files change, plus manual `workflow_dispatch`
 - `codeql.yaml`: automatic on push to `main` for CI automation/chart paths, weekly schedule, plus manual `workflow_dispatch`
 
 For full cross-repo trigger ownership and lifecycle details, see `https://github.com/orhayoun-eevee/build-workflow/blob/main/docs/workflow-trigger-matrix.md`.
