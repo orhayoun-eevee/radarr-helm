@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   drift-check:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.6
+    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.7
     with:
       repo_name: radarr-helm
     secrets:

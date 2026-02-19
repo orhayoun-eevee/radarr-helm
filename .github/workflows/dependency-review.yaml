@@ -8,4 +8,4 @@ permissions:
 
 jobs:
   dependency-review:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.6
+    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.7
