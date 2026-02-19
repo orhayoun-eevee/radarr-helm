@@ -1,4 +1,4 @@
-name: Dependency Review (Manual)
+name: Dependency Review (Manual / Break Glass)
 
 on:
   workflow_dispatch:
@@ -6,6 +6,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: dependency-review-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   dependency-review:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.6
+    uses: orhayoun-eevee/build-workflow/.github/workflows/dependency-review.yaml@v0.1.7

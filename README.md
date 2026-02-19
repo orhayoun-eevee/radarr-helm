@@ -31,15 +31,15 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 ### CI Workflows
 
 - Required gate: `.github/workflows/pr-required-checks.yaml` (thin wrapper around centralized `pr-required-checks-chart.yaml` in `build-workflow`; this is the only automatic PR gate)
-- Manual PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
+- Manual break-glass PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml` (includes keyless signing/attestation)
 - Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
-- Manual dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
+- Manual break-glass dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
 - Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`; automatic on push/schedule)
-- Manual scaffold drift check: `.github/workflows/scaffold-drift-check.yaml`
+- Manual break-glass scaffold drift check: `.github/workflows/scaffold-drift-check.yaml`
 
 Trigger behavior:
-- `pr-required-checks.yaml`: automatic on every PR to `main` (require this status in branch protection)
+- `pr-required-checks.yaml`: automatic on every PR to `main` and `merge_group` (`checks_requested`) (require this status in branch protection)
 - `on-pr.yaml`: manual via `workflow_dispatch`
 - `dependency-review.yaml`: manual via `workflow_dispatch`
 - `scaffold-drift-check.yaml`: manual via `workflow_dispatch`

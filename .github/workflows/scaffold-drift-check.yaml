@@ -1,4 +1,4 @@
-name: Scaffold Drift Check (Manual)
+name: Scaffold Drift Check (Manual / Break Glass)
 
 on:
   workflow_dispatch:
@@ -6,9 +6,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: scaffold-drift-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   drift-check:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.6
+    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.7
     with:
       repo_name: radarr-helm
     secrets:
