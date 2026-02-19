@@ -8,6 +8,8 @@ on:
       - '.github/workflows/on-pr.yaml'
       - '.github/workflows/on-tag.yaml'
       - '.github/workflows/dependency-review.yaml'
+      - '.github/workflows/codeql.yaml'
+      - '.github/workflows/pr-required-checks.yaml'
       - '.github/workflows/renovate-config.yaml'
       - '.github/workflows/renovate-snapshot-update.yaml'
       - '.github/workflows/scaffold-drift-check.yaml'
@@ -20,6 +22,8 @@ on:
       - '.github/workflows/on-pr.yaml'
       - '.github/workflows/on-tag.yaml'
       - '.github/workflows/dependency-review.yaml'
+      - '.github/workflows/codeql.yaml'
+      - '.github/workflows/pr-required-checks.yaml'
       - '.github/workflows/renovate-config.yaml'
       - '.github/workflows/renovate-snapshot-update.yaml'
       - '.github/workflows/scaffold-drift-check.yaml'
@@ -29,7 +33,7 @@ permissions:
 
 jobs:
   drift-check:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.3
+    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.4
     with:
       repo_name: radarr-helm
     secrets:
