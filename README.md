@@ -31,15 +31,19 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 ### CI Workflows
 
 - PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
+- Required gate: `.github/workflows/pr-required-checks.yaml` (always-on branch protection status)
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml`
 - Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
 - Dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
+- Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`)
 
 Trigger behavior:
 - `on-pr.yaml`: automatic on every PR to `main`
+- `pr-required-checks.yaml`: automatic on every PR to `main` (require this status in branch protection)
 - `on-tag.yaml`: automatic on `v*` tag push
 - `renovate-snapshot-update.yaml`: automatic for Renovate PRs when `values.yaml` changes
 - `renovate-config.yaml`: automatic when Renovate config files change, plus manual `workflow_dispatch`
+- `codeql.yaml`: automatic on CI automation/chart path changes and weekly schedule
 
 For full cross-repo trigger ownership and lifecycle details, see `https://github.com/orhayoun-eevee/build-workflow/blob/main/docs/workflow-trigger-matrix.md`.
 
@@ -101,6 +105,6 @@ This repo uses Renovate scoped automerge for low-risk updates only:
 - container image updates (`custom.regex` in `values.yaml`): `digest`, `pin`, `pinDigest`, `patch`, `minor`
 - `major` updates are not automerged
 
-Branch protection on `main` is expected to require passing validation checks before merge.
+Branch protection on `main` is expected to require passing `required-checks` before merge.
 
 For Renovate PRs that change `values.yaml`, `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
