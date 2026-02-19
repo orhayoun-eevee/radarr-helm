@@ -33,6 +33,7 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 - PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml`
 - Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
+- Dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
 
 Trigger behavior:
 - `on-pr.yaml`: automatic on every PR to `main`
@@ -51,7 +52,7 @@ make snapshot-update
 make ci
 ```
 
-If you use the shared image directly (`DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate@sha256:<digest>`), authenticate Docker first:
+If you use the shared image directly (`DOCKER_IMAGE=ghcr.io/orhayoun-eevee/helm-validate:vX.Y.Z`), keep the tag aligned with your pinned `build-workflow` release and authenticate Docker first:
 
 ```bash
 echo <TOKEN> | docker login ghcr.io -u <USER> --password-stdin
