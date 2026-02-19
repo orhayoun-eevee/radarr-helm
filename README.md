@@ -108,6 +108,9 @@ This repo uses Renovate scoped automerge for low-risk updates only:
 - container image updates (`custom.regex` in `values.yaml`): `digest`, `pin`, `pinDigest`, `patch`, `minor`
 - `major` updates are not automerged
 
-Branch protection on `main` is expected to require passing `required-checks` before merge.
+Branch protection on `main` is expected to require only the aggregate `required-checks` status before merge.
+Recommended contexts:
+- `PR Required Checks / required-checks / required-checks (pull_request)`
+- `PR Required Checks / required-checks / required-checks (merge_group)`
 
 For Renovate PRs that change `values.yaml`, `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
