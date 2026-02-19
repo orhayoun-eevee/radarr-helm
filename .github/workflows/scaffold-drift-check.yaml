@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   drift-check:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.9
+    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.10
     with:
       repo_name: radarr-helm
     secrets:
