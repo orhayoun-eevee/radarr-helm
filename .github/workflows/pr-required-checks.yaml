@@ -2,8 +2,20 @@ name: PR Required Checks
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'AGENTS.md'
+      - '.gitignore'
+      - '.editorconfig'
+      - 'LICENSE'
   merge_group:
     types:
       - checks_requested
@@ -23,9 +35,8 @@ jobs:
       contents: read
       packages: read
       security-events: write
-    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.11
+    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.12
     with:
-      repo_name: radarr-helm
       chart_kind: app
       enable_codeql: true
     secrets:

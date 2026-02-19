@@ -22,4 +22,4 @@ concurrency:
 
 jobs:
   codeql:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.11
+    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.12
