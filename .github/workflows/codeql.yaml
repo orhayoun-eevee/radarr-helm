@@ -27,4 +27,4 @@ permissions:
 
 jobs:
   codeql:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.4
+    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.5

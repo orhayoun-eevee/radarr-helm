@@ -31,8 +31,8 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 ### CI Workflows
 
 - PR validation: `.github/workflows/on-pr.yaml` -> `build-workflow/.github/workflows/helm-validate.yaml`
-- Required gate: `.github/workflows/pr-required-checks.yaml` (always-on branch protection status)
-- Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml`
+- Required gate: `.github/workflows/pr-required-checks.yaml` (thin wrapper around centralized `pr-required-checks-chart.yaml` in `build-workflow`)
+- Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml` (includes keyless signing/attestation)
 - Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
 - Dependency review: `.github/workflows/dependency-review.yaml` (centralized reusable workflow in `build-workflow`)
 - Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`)
