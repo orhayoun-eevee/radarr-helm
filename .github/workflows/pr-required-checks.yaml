@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   required-checks:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.7
+    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.8
     with:
       repo_name: radarr-helm
       chart_kind: app

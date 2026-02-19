@@ -1,13 +1,6 @@
 name: Validate Renovate Config
 
 on:
-  pull_request:
-    paths:
-      - 'renovate.json'
-      - 'renovate.json5'
-      - '.github/renovate.json'
-      - '.github/renovate.json5'
-      - '.github/workflows/renovate-config.yaml'
   push:
     branches:
       - main
@@ -28,4 +21,4 @@ concurrency:
 
 jobs:
   validate:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-config.yaml@v0.1.7
+    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-config.yaml@v0.1.8
