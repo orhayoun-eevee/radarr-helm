@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   update-snapshots:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-snapshot-update.yaml@v0.1.8
+    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-snapshot-update.yaml@v0.1.9
     with:
       snapshots_dir: tests/snapshots
     secrets:
