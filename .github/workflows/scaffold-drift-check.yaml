@@ -1,39 +1,14 @@
-name: Scaffold Drift Check
+name: Scaffold Drift Check (Manual)
 
 on:
-  pull_request:
-    paths:
-      - 'Makefile'
-      - 'scripts/bump-version.sh'
-      - '.github/workflows/on-pr.yaml'
-      - '.github/workflows/on-tag.yaml'
-      - '.github/workflows/dependency-review.yaml'
-      - '.github/workflows/codeql.yaml'
-      - '.github/workflows/pr-required-checks.yaml'
-      - '.github/workflows/renovate-config.yaml'
-      - '.github/workflows/renovate-snapshot-update.yaml'
-      - '.github/workflows/scaffold-drift-check.yaml'
-  push:
-    branches:
-      - main
-    paths:
-      - 'Makefile'
-      - 'scripts/bump-version.sh'
-      - '.github/workflows/on-pr.yaml'
-      - '.github/workflows/on-tag.yaml'
-      - '.github/workflows/dependency-review.yaml'
-      - '.github/workflows/codeql.yaml'
-      - '.github/workflows/pr-required-checks.yaml'
-      - '.github/workflows/renovate-config.yaml'
-      - '.github/workflows/renovate-snapshot-update.yaml'
-      - '.github/workflows/scaffold-drift-check.yaml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   drift-check:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.5
+    uses: orhayoun-eevee/build-workflow/.github/workflows/scaffold-drift-check.yaml@v0.1.6
     with:
       repo_name: radarr-helm
     secrets:

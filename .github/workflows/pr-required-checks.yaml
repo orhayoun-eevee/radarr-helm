@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   required-checks:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.5
+    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.6
     with:
       repo_name: radarr-helm
       chart_kind: app

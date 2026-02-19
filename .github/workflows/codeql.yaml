@@ -1,14 +1,6 @@
 name: CodeQL
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/**"
-      - "scripts/**"
-      - "templates/**"
-      - "values.yaml"
   push:
     branches:
       - main
@@ -19,6 +11,7 @@ on:
       - "values.yaml"
   schedule:
     - cron: "21 4 * * 1"
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -27,4 +20,4 @@ permissions:
 
 jobs:
   codeql:
-    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.5
+    uses: orhayoun-eevee/build-workflow/.github/workflows/codeql.yaml@v0.1.6

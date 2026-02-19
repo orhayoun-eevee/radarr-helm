@@ -1,13 +1,7 @@
-name: PR Validation
+name: PR Validation (Manual)
 
 on:
-  pull_request:
-    branches:
-      - main
-
-concurrency:
-  group: pr-validation-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,7 +10,7 @@ permissions:
 jobs:
   validate:
     name: Validate Radarr Chart
-    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@v0.1.5
+    uses: orhayoun-eevee/build-workflow/.github/workflows/helm-validate.yaml@v0.1.6
     with:
       chart_path: .
       kubernetes_version: "1.30.0"
