@@ -3,6 +3,8 @@ name: Renovate Snapshot Update
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    branches:
+      - main
     paths:
       - "values.yaml"
 
@@ -16,8 +18,8 @@ concurrency:
 
 jobs:
   update-snapshots:
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-snapshot-update.yaml@v0.1.14
+    if: github.actor == 'renovate[bot]' && github.event.pull_request.user.login == 'renovate[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+    uses: orhayoun-eevee/build-workflow/.github/workflows/renovate-snapshot-update.yaml@v0.1.15
     with:
       snapshots_dir: tests/snapshots
     secrets:
