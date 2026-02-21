@@ -28,7 +28,7 @@ jobs:
       contents: read
       packages: read
       security-events: write
-    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.12
+    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.13
     with:
       chart_kind: app
       enable_codeql: true
