@@ -9,6 +9,13 @@ on:
       - ready_for_review
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - 'AGENTS.md'
+      - '.gitignore'
+      - '.editorconfig'
+      - 'LICENSE'
   merge_group:
     types:
       - checks_requested
@@ -24,14 +31,11 @@ jobs:
   ci-required:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     permissions:
-      actions: read
       contents: read
       packages: read
-      security-events: write
-    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.12
+    uses: orhayoun-eevee/build-workflow/.github/workflows/pr-required-checks-chart.yaml@v0.1.13
     with:
       chart_kind: app
-      enable_codeql: true
     secrets:
       gh_app_id: ${{ secrets.GHCR_AUTO_APP_ID }}
       gh_app_private_key: ${{ secrets.GHCR_AUTO_PKEY }}
