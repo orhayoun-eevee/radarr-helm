@@ -9,7 +9,7 @@ keywords:
   - media-center
 dependencies:
   - name: lib-chart
-    version: "0.0.7"
+    version: "0.0.9"
     repository: "oci://ghcr.io/orhayoun-eevee"
 maintainers:
   - name: Radarr Team
