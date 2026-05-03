@@ -2,14 +2,14 @@ apiVersion: v2
 name: radarr
 description: A Helm chart for Radarr using lib-chart
 type: application
-version: 0.0.8
+version: 0.0.9
 appVersion: "6.0.4.10291"
 keywords:
   - radarr
   - media-center
 dependencies:
   - name: lib-chart
-    version: "0.0.11"
+    version: "0.0.14"
     repository: "oci://ghcr.io/orhayoun-eevee"
 maintainers:
   - name: Radarr Team
