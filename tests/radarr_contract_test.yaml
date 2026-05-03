@@ -38,23 +38,33 @@ tests:
 
   - it: wires radarr application container security and pvc correctly
     asserts:
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].name
+          path: spec.template.spec.containers[0].name
           value: radarr
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].securityContext.readOnlyRootFilesystem
+          path: spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem
           value: true
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].securityContext.runAsUser
+          path: spec.template.spec.containers[0].securityContext.runAsUser
           value: 1013
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].securityContext.runAsGroup
+          path: spec.template.spec.containers[0].securityContext.runAsGroup
           value: 1011
-      - documentIndex: 14
+      - documentSelector:
+          path: kind
+          value: PersistentVolumeClaim
         equal:
           path: metadata.name
           value: radarr-config
@@ -145,16 +155,19 @@ tests:
 
   - it: applies explicit radarr image override for controlled rollouts
     set:
-      deployment:
-        containers:
-          radarr:
-            image:
-              repository: registry.internal/radarr
-              tag: ci-test
+      workload:
+        spec:
+          containers:
+            radarr:
+              image:
+                repository: registry.internal/radarr
+                tag: ci-test
     asserts:
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].image
+          path: spec.template.spec.containers[0].image
           value: registry.internal/radarr:ci-test
 
   - it: keeps radarr networking and health probes wired to stable defaults
@@ -171,19 +184,27 @@ tests:
         equal:
           path: spec.ports[0].targetPort
           value: metrics
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].livenessProbe.httpGet.path
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.path
           value: /ping
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].readinessProbe.httpGet.path
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.path
           value: /ping
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
           path: spec.template.spec.volumes[0].persistentVolumeClaim.claimName
           value: radarr-config
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].imagePullPolicy
+          path: spec.template.spec.containers[0].imagePullPolicy
           value: Always

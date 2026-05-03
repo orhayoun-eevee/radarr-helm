@@ -230,131 +230,133 @@ network:
 
 
 # ----------------------------------------------------------------------------
-# Deployment Configuration
+# Workload Configuration
 # ----------------------------------------------------------------------------
-deployment:
-  replicas: 1
-  strategy:
-    type: Recreate
-  revisionHistoryLimit: 3
-  terminationGracePeriodSeconds: 60
-  dnsPolicy: ClusterFirst
-  enableServiceLinks: false
-  automountServiceAccountToken: false
+workload:
+  type: deployment
+  spec:
+    replicas: 1
+    strategy:
+      type: Recreate
+    revisionHistoryLimit: 3
+    terminationGracePeriodSeconds: 60
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: false
+    automountServiceAccountToken: false
 
-  # Pod labels
-  podLabels:
-    app.kubernetes.io/part-of: media-center
-    logging.kubernetes.io/component: media-center
-    logging.kubernetes.io/service: radarr
+    # Pod labels
+    podLabels:
+      app.kubernetes.io/part-of: media-center
+      logging.kubernetes.io/component: media-center
+      logging.kubernetes.io/service: radarr
 
-  # Pod security context
-  podSecurityContext:
-    fsGroup: 1011
-    fsGroupChangePolicy: OnRootMismatch
-    runAsNonRoot: true
-    supplementalGroups:
-      - 1010  # downloads group for NFS access
-      - 1003  # media-nfs group for NFS access
+    # Pod security context
+    podSecurityContext:
+      fsGroup: 1011
+      fsGroupChangePolicy: OnRootMismatch
+      runAsNonRoot: true
+      supplementalGroups:
+        - 1010  # downloads group for NFS access
+        - 1003  # media-nfs group for NFS access
 
-  # Main container configuration
-  # NOTE: Container name 'radarr' matches dashboard queries (container="radarr")
-  # Application-v2 requires explicit container definitions (no defaults)
-  containers:
-    radarr:
-      enabled: true
-      image:
-        repository: ghcr.io/runlix/radarr
-        tag: "release-6.0.4.10291-latest@sha256:9a66eb0d9422af321be8435183613bc23f8f047c1a9e2b4f51e75ea2ebfab32e"
-        pullPolicy: Always
+    # Main container configuration
+    # NOTE: Container name 'radarr' matches dashboard queries (container="radarr")
+    # Application-v2 requires explicit container definitions (no defaults)
+    containers:
+      radarr:
+        enabled: true
+        image:
+          repository: ghcr.io/runlix/radarr
+          tag: "release-6.0.4.10291-latest@sha256:9a66eb0d9422af321be8435183613bc23f8f047c1a9e2b4f51e75ea2ebfab32e"
+          pullPolicy: Always
 
-      env:
-        - name: TZ
-          value: "UTC"
-        - name: RADARR__SERVER__PORT
-          value: "8080"
-        - name: RADARR__SERVER__BINDADDRESS
-          value: "0.0.0.0"
+        env:
+          - name: TZ
+            value: "UTC"
+          - name: RADARR__SERVER__PORT
+            value: "8080"
+          - name: RADARR__SERVER__BINDADDRESS
+            value: "0.0.0.0"
 
-      ports:
-        - containerPort: 8080
-          name: http
-          protocol: TCP
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
 
-      volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: media
-          mountPath: /media
-        - name: media-old
-          mountPath: /media-old
-        - name: downloads
-          mountPath: /downloads
-        - name: backup
-          mountPath: /backup
-        - name: tmp
-          mountPath: /tmp
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: media
+            mountPath: /media
+          - name: media-old
+            mountPath: /media-old
+          - name: downloads
+            mountPath: /downloads
+          - name: backup
+            mountPath: /backup
+          - name: tmp
+            mountPath: /tmp
 
-      # Health Probes
-      livenessProbe:
-        httpGet:
-          path: /ping
-          port: http
-          scheme: HTTP
-        failureThreshold: 3
-        initialDelaySeconds: 30
-        periodSeconds: 30
-        successThreshold: 1
-        timeoutSeconds: 5
+        # Health Probes
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
 
-      readinessProbe:
-        httpGet:
-          path: /ping
-          port: http
-          scheme: HTTP
-        failureThreshold: 3
-        initialDelaySeconds: 15
-        periodSeconds: 10
-        successThreshold: 1
-        timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
 
-      startupProbe:
-        httpGet:
-          path: /ping
-          port: http
-          scheme: HTTP
-        failureThreshold: 30
-        initialDelaySeconds: 10
-        periodSeconds: 5
-        successThreshold: 1
-        timeoutSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: http
+            scheme: HTTP
+          failureThreshold: 30
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
 
-      # Container Security Context (main container override)
-      securityContext:
-        readOnlyRootFilesystem: true
-        runAsNonRoot: true
-        runAsUser: 1013  # Matches Radarr PUID
-        runAsGroup: 1011  # Matches Radarr PGID
-        allowPrivilegeEscalation: false
-        privileged: false
-        appArmorProfile:
-          type: RuntimeDefault
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+        # Container Security Context (main container override)
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1013  # Matches Radarr PUID
+          runAsGroup: 1011  # Matches Radarr PGID
+          allowPrivilegeEscalation: false
+          privileged: false
+          appArmorProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
 
-      # Resources
-      resources:
-        requests:
-          cpu: 500m
-          memory: 256Mi
-          ephemeral-storage: 2Gi
-        limits:
-          cpu: 500m
-          memory: 1Gi
-          ephemeral-storage: 2Gi
+        # Resources
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+            ephemeral-storage: 2Gi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+            ephemeral-storage: 2Gi
 
     # Metrics exporter container (Exportarr)
     exportarr:

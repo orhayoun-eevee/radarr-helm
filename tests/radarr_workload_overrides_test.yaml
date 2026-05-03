@@ -2,10 +2,11 @@ suite: radarr workload overrides
 templates:
   - templates/all.yaml
 tests:
-  - it: applies deployment replica override
+  - it: applies workload replica override
     set:
-      deployment:
-        replicas: 2
+      workload:
+        spec:
+          replicas: 2
     asserts:
       - documentSelector:
           path: kind
@@ -16,9 +17,10 @@ tests:
 
   - it: applies pod security context fsGroup override
     set:
-      deployment:
-        podSecurityContext:
-          fsGroup: 2000
+      workload:
+        spec:
+          podSecurityContext:
+            fsGroup: 2000
     asserts:
       - documentSelector:
           path: kind
@@ -43,27 +45,33 @@ tests:
 
   - it: applies container cpu limit override
     set:
-      deployment:
-        containers:
-          radarr:
-            resources:
-              limits:
-                cpu: 750m
+      workload:
+        spec:
+          containers:
+            radarr:
+              resources:
+                limits:
+                  cpu: 750m
     asserts:
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].resources.limits.cpu
+          path: spec.template.spec.containers[0].resources.limits.cpu
           value: 750m
 
   - it: applies container security context runAsUser override
     set:
-      deployment:
-        containers:
-          radarr:
-            securityContext:
-              runAsUser: 2001
+      workload:
+        spec:
+          containers:
+            radarr:
+              securityContext:
+                runAsUser: 2001
     asserts:
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].securityContext.runAsUser
+          path: spec.template.spec.containers[0].securityContext.runAsUser
           value: 2001

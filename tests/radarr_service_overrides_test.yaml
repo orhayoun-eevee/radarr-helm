@@ -66,14 +66,17 @@ tests:
 
   - it: applies app timezone env override
     set:
-      deployment:
-        containers:
-          radarr:
-            env:
-              - name: TZ
-                value: Europe/Berlin
+      workload:
+        spec:
+          containers:
+            radarr:
+              env:
+                - name: TZ
+                  value: Europe/Berlin
     asserts:
-      - documentIndex: 1
+      - documentSelector:
+          path: kind
+          value: Deployment
         equal:
-          path: spec.template.spec.containers[1].env[0].value
+          path: spec.template.spec.containers[0].env[0].value
           value: Europe/Berlin

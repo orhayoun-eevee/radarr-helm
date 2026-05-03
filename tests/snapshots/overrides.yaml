@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   podSelector:
     matchLabels:
@@ -99,7 +99,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
   annotations:
     app.kubernetes.io/managed-by: argocd
     description: Radarr media center service account
@@ -117,7 +117,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
   annotations:
     helm.sh/resource-policy: keep
 spec:
@@ -140,7 +140,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
   annotations:
     description: Radarr media center HTTP service
 spec:
@@ -166,7 +166,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
   annotations:
     description: Radarr media center HTTP service
 spec:
@@ -192,7 +192,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   replicas: 2
   revisionHistoryLimit: 3
@@ -210,11 +210,12 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: radarr
         app.kubernetes.io/version: 6.0.4.10291
-        helm.sh/chart: radarr-0.0.8
+        helm.sh/chart: radarr-0.0.9
         app.kubernetes.io/part-of: media-center
         logging.kubernetes.io/component: media-center
         logging.kubernetes.io/service: radarr
     spec:
+      
       terminationGracePeriodSeconds: 60
       securityContext:
         fsGroup: 2000
@@ -228,81 +229,6 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       containers:
-        - name: exportarr
-          image: ghcr.io/orhayoun/exportarr:v2.3.1@sha256:2650f6a501b1d691daf5dfe758068f44336d0bb1d443f9db2c94900244d423bc
-          imagePullPolicy: Always
-          ports:
-            - name: metrics
-              containerPort: 9100
-              protocol: TCP
-          args:
-            - radarr
-          env:
-            - name: URL
-              value: http://localhost:8080
-            - name: CONFIG
-              value: /config/config.xml
-            - name: PORT
-              value: "9100"
-            - name: ENABLE_ADDITIONAL_METRICS
-              value: "false"
-            - name: ENABLE_UNKNOWN_QUEUE_ITEMS
-              value: "false"
-          volumeMounts:
-            - mountPath: /config
-              name: config
-          resources:
-            limits:
-              cpu: 100m
-              ephemeral-storage: 100Mi
-              memory: 64Mi
-            requests:
-              cpu: 10m
-              ephemeral-storage: 100Mi
-              memory: 32Mi
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /metrics
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            successThreshold: 1
-            timeoutSeconds: 5
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /metrics
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 5
-          startupProbe:
-            failureThreshold: 30
-            httpGet:
-              path: /metrics
-              port: metrics
-              scheme: HTTP
-            initialDelaySeconds: 45
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 10
-          securityContext:
-            allowPrivilegeEscalation: false
-            appArmorProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
-            runAsGroup: 65534
-            runAsNonRoot: true
-            runAsUser: 65534
-            seccompProfile:
-              type: RuntimeDefault
         - name: radarr
           image: ghcr.io/runlix/radarr:release-6.0.4.10291-latest@sha256:9a66eb0d9422af321be8435183613bc23f8f047c1a9e2b4f51e75ea2ebfab32e
           imagePullPolicy: Always
@@ -419,7 +345,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   selector:
     matchLabels:
@@ -448,7 +374,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   selector:
     matchLabels:
@@ -477,7 +403,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   selector:
     matchLabels:
@@ -506,7 +432,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   host: radarr-http
   trafficPolicy:
@@ -535,7 +461,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   instanceSelector:
     matchLabels:
@@ -557,7 +483,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   parentRefs:
     - name: shared-platform-gateway
@@ -568,17 +494,16 @@ spec:
   hostnames:
     - radarr-k8s.orhayoun.com
   rules:
-    -
+    - backendRefs:
+      - group: ""
+        kind: Service
+        name: radarr-http
+        port: 8080
+        weight: 100
       matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - group: ""
-          kind: Service
-          name: radarr-http
-          port: 8080
-          weight: 100
+      - path:
+          type: PathPrefix
+          value: /
 ---
 # Source: radarr/templates/all.yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -592,7 +517,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   parentRefs:
     - name: shared-platform-gateway
@@ -603,16 +528,15 @@ spec:
   hostnames:
     - radarr-k8s.orhayoun.com
   rules:
-    -
+    - filters:
+      - requestRedirect:
+          scheme: https
+          statusCode: 301
+        type: RequestRedirect
       matches:
-        - path:
-            type: PathPrefix
-            value: /
-      filters:
-        - requestRedirect:
-            scheme: https
-            statusCode: 301
-          type: RequestRedirect
+      - path:
+          type: PathPrefix
+          value: /
 ---
 # Source: radarr/templates/all.yaml
 apiVersion: monitoring.coreos.com/v1
@@ -626,7 +550,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   groups:
     - name: radarr.rules
@@ -742,7 +666,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: radarr
     app.kubernetes.io/version: 6.0.4.10291
-    helm.sh/chart: radarr-0.0.8
+    helm.sh/chart: radarr-0.0.9
 spec:
   selector:
     matchLabels:

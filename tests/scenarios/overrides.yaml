@@ -12,11 +12,12 @@ network:
           metrics:
             port: 9200
 
-deployment:
-  replicas: 2
-  podSecurityContext:
-    fsGroup: 2000
-  containers:
-    radarr:
-      securityContext:
-        runAsUser: 2001
+workload:
+  spec:
+    replicas: 2
+    podSecurityContext:
+      fsGroup: 2000
+    containers:
+      radarr:
+        securityContext:
+          runAsUser: 2001
