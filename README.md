@@ -32,14 +32,14 @@ This chart follows the same reusable 5-layer validation pipeline used by `helm-c
 
 - Required gate: `.github/workflows/pr-required-checks.yaml` (thin wrapper around centralized `pr-required-checks-chart.yaml` in `build-workflow`; this is the only automatic PR gate)
 - Release: `.github/workflows/on-tag.yaml` -> `build-workflow/.github/workflows/release-chart.yaml` (includes keyless signing/attestation)
-- Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching `values.yaml`)
+- Renovate snapshot updates: `.github/workflows/renovate-snapshot-update.yaml` (Renovate PRs touching render inputs)
 - Renovate config validation: `.github/workflows/renovate-config.yaml` (automatic on matching config changes; supports `workflow_dispatch`)
 - Code scanning: `.github/workflows/codeql.yaml` (centralized reusable workflow in `build-workflow`; automatic on push/schedule and manual via `workflow_dispatch`)
 
 Trigger behavior:
 - `pr-required-checks.yaml`: automatic on every PR to `main` and `merge_group` (`checks_requested`) (require this status in branch protection)
 - `on-tag.yaml`: automatic on `v*` tag push
-- `renovate-snapshot-update.yaml`: automatic for Renovate PRs when `values.yaml` changes
+- `renovate-snapshot-update.yaml`: automatic for Renovate PRs when render inputs change
 - `renovate-config.yaml`: automatic on push to `main` when Renovate config files change, plus manual `workflow_dispatch`
 - `codeql.yaml`: automatic on push to `main` for CI automation/chart paths, weekly schedule, plus manual `workflow_dispatch`
 
@@ -108,4 +108,4 @@ Recommended contexts:
 - `PR Required Checks / ci-required / ci-required (pull_request)`
 - `PR Required Checks / ci-required / ci-required (merge_group)`
 
-For Renovate PRs that change `values.yaml`, `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
+For Renovate PRs that change render inputs (`Chart.yaml`, `Chart.lock`, `values.yaml`, `templates/`, `charts/`, or `tests/scenarios/`), `.github/workflows/renovate-snapshot-update.yaml` runs `make snapshot-update` and commits updated `tests/snapshots/*` back to the PR branch so strict snapshot checks remain enforced.
